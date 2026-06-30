@@ -1,0 +1,108 @@
+# https://taskfile.dev
+version: "3"
+
+vars:
+  MODULE: github.com/arashackdev/doopl
+  GOVERTER_PKGS: ./internal/convert/... ./cmd/doopl/internal/convert/...
+
+tasks:
+  default:
+    desc: Run the standard local check (fmt, vet, lint, generate-check, test)
+    cmds:
+      - task: fmt
+      - task: vet
+      - task: lint
+      - task: generate-check
+      - task: test
+
+  tools:
+    desc: Install pinned dev tools (revive, goverter, golangci stack not used — revive only)
+    cmds:
+      - go install github.com/mgechev/revive@latest
+      - go install github.com/jmattheis/goverter/cmd/goverter@latest
+
+  fmt:
+    desc: Format all Go source
+    cmds:
+      - gofmt -l -w .
+
+  fmt:check:
+    desc: Fail if any file is not gofmt-formatted (CI use)
+    cmds:
+      - test -z "$(gofmt -l .)" || (gofmt -l . && exit 1)
+
+  vet:
+    desc: Run go vet
+    cmds:
+      - go vet ./...
+
+  lint:
+    desc: Run revive against the whole module
+    cmds:
+      - revive -config revive.toml -formatter friendly -exclude internal/convert/converter_gen.go -exclude cmd/doopl/internal/convert/converter_gen.go ./...
+
+  generate:
+    desc: Regenerate all goverter converters
+    cmds:
+      - goverter gen {{.GOVERTER_PKGS}}
+
+  generate:check:
+    desc: Fail if generated converters are stale (CI use — run generate, then git diff)
+    cmds:
+      - task: generate
+      - git diff --exit-code -- '**/converter_gen.go'
+
+  build:
+    desc: Build the library and CLI
+    cmds:
+      - go build ./...
+
+  test:
+    desc: Run the test suite
+    cmds:
+      - go test ./... -race -cover
+
+  generate:mocks:
+    desc: Generate mocks for testing with mockery
+    cmds:
+      - mockery --all --inpackage --with-expecter --output=internal/mocks --dir=internal/interfaces
+
+  test:report:
+    desc: Generate test coverage report
+    cmds:
+      - go test ./... -cover -json > test-report.json
+      - go run scripts/generate_test_report.go test-report.json > docs/TEST_REPORT.md
+
+  cli:build:
+    desc: Build the doopl CLI binary to ./bin/doopl (optimized for production)
+    vars:
+      VERSION:
+        sh: git describe --tags --always 2>/dev/null || echo "dev"
+    cmds:
+      - mkdir -p bin
+      - go build -trimpath -ldflags="-s -w" -o bin/doopl ./cmd/doopl
+
+  mcp:build:
+    desc: Build the doopl-mcp server binary to ./bin/doopl-mcp
+    cmds:
+      - mkdir -p bin
+      - go build -trimpath -ldflags="-s -w" -o bin/doopl-mcp ./cmd/doopl-mcp
+
+  cli:install:
+    desc: Install optimized doopl CLI to $GOPATH/bin/doopl
+    cmds:
+      - go install -trimpath -ldflags="-s -w" ./cmd/doopl
+
+  mcp:install:
+    desc: Install doopl-mcp server to $GOPATH/bin/doopl-mcp
+    cmds:
+      - go install -trimpath -ldflags="-s -w" ./cmd/doopl-mcp
+
+  ci:
+    desc: Everything CI runs on a PR
+    cmds:
+      - task: fmt:check
+      - task: vet
+      - task: lint
+      - task: generate:check
+      - task: test

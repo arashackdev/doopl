@@ -1,0 +1,61 @@
+# Binaries
+*.exe
+*.exe~
+*.dll
+*.so
+*.so.*
+*.dylib
+
+# Test binary
+*.test
+
+# Coverage output
+*.out
+
+# Go workspace
+go.work
+
+# IDE & editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Build artifacts
+bin/
+dist/
+doopl
+cmd/doopl/doopl
+
+# Task outputs
+.task/
+
+# Vendor
+vendor/
+
+# Test cache
+.testcache/
+
+# Claude Code memory (local-only)
+.claude/
+
+# Local development overrides
+.env
+.env.local
+
+# Development notes (not shipped)
+MILESTONES.md
+docs/build-plan.md
+
+# Generated mocks
+internal/mocks/
+
+# Test reports
+test-report.json
+REVIEW_SUMMARY.md
+REFACTOR_CHECKLIST.md
+FILES_TO_IGNORE.md
+QUICK_REFERENCE.txt
+docs/TEST_*

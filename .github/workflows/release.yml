@@ -1,0 +1,120 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - v*
+
+permissions:
+  contents: write
+  packages: write
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - os: linux
+            arch: amd64
+          - os: linux
+            arch: arm64
+          - os: darwin
+            arch: amd64
+          - os: darwin
+            arch: arm64
+          - os: windows
+            arch: amd64
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-go@v4
+        with:
+          go-version: 1.23.x
+
+      - name: Build doopl CLI
+        env:
+          GOOS: ${{ matrix.os }}
+          GOARCH: ${{ matrix.arch }}
+        run: |
+          mkdir -p dist
+          version=${GITHUB_REF#refs/tags/}
+          suffix=""
+          [ "${{ matrix.os }}" = "windows" ] && suffix=".exe"
+          go build \
+            -trimpath \
+            -ldflags="-s -w -X main.Version=${version}" \
+            -o dist/doopl-${version}-${{ matrix.os }}-${{ matrix.arch }}${suffix} \
+            ./cmd/doopl
+
+      - name: Build doopl-mcp server
+        env:
+          GOOS: ${{ matrix.os }}
+          GOARCH: ${{ matrix.arch }}
+        run: |
+          mkdir -p dist
+          version=${GITHUB_REF#refs/tags/}
+          suffix=""
+          [ "${{ matrix.os }}" = "windows" ] && suffix=".exe"
+          go build \
+            -trimpath \
+            -ldflags="-s -w -X main.Version=${version}" \
+            -o dist/doopl-mcp-${version}-${{ matrix.os }}-${{ matrix.arch }}${suffix} \
+            ./cmd/doopl-mcp
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: binaries-${{ matrix.os }}-${{ matrix.arch }}
+          path: dist/
+
+  create-release:
+    needs: build-and-release
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Prepare release assets
+        run: |
+          mkdir -p release
+          find artifacts -type f -exec mv {} release/ \;
+          ls -la release/
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: release/*
+          generate_release_notes: true
+          draft: false
+          prerelease: ${{ contains(github.ref, 'alpha') || contains(github.ref, 'beta') || contains(github.ref, 'rc') }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  publish-to-pkg-go-dev:
+    needs: create-release
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-go@v4
+        with:
+          go-version: 1.23.x
+
+      - name: Trigger pkg.go.dev indexing
+        run: |
+          version=${GITHUB_REF#refs/tags/}
+          echo "Tagging version: ${version}"
+          echo "pkg.go.dev will automatically index this release at: https://pkg.go.dev/github.com/arashackdev/doopl@${version}"
+          echo "(This is automatic; no action required — pkg.go.dev polls GitHub for new tags)"

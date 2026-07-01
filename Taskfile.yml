@@ -6,6 +6,7 @@ vars:
   GOVERTER_PKGS: ./internal/convert/... ./cmd/doopl/internal/convert/...
   REVIVE_VERSION: v1.14.0
   GOVERTER_VERSION: v1.9.4
+  GORELEASER_VERSION: latest
 
 tasks:
   default:
@@ -18,10 +19,11 @@ tasks:
       - task: test
 
   tools:
-    desc: Install pinned dev tools (revive, goverter) — versions are tracked in vars
+    desc: Install pinned dev tools (revive, goverter, goreleaser) — versions are tracked in vars
     cmds:
       - go install github.com/mgechev/revive@{{.REVIVE_VERSION}}
       - go install github.com/jmattheis/goverter/cmd/goverter@{{.GOVERTER_VERSION}}
+      - go install github.com/goreleaser/goreleaser@{{.GORELEASER_VERSION}}
 
   fmt:
     desc: Format all Go source
@@ -41,7 +43,7 @@ tasks:
   lint:
     desc: Run revive against the whole module (excludes generated files)
     cmds:
-      - revive -config revive.toml -formatter friendly ./pkg/deepl/... ./internal/apimodel/... ./internal/transport/... ./internal/config/... ./cmd/doopl/...* ./cmd/doopl/internal/entity/...
+      - revive -config revive.toml -formatter friendly ./pkg/deepl/... ./internal/apimodel/... ./internal/transport/... ./internal/config/... ./cmd/doopl/... ./cmd/doopl/internal/entity/...
 
   generate:
     desc: Regenerate all goverter converters (runs go mod tidy to ensure consistency)
@@ -86,18 +88,29 @@ tasks:
       - mkdir -p bin
       - go build -trimpath -ldflags="-s -w" -o bin/doopl ./cmd/doopl
 
-  mcp:build:
-    desc: Build the doopl-mcp server binary to ./bin/doopl-mcp
-    cmds:
-      - mkdir -p bin
-      - go build -trimpath -ldflags="-s -w" -o bin/doopl-mcp ./cmd/doopl-mcp
-
   cli:install:
     desc: Install optimized doopl CLI to $GOPATH/bin/doopl
     cmds:
       - go install -trimpath -ldflags="-s -w" ./cmd/doopl
 
-  mcp:install:
-    desc: Install doopl-mcp server to $GOPATH/bin/doopl-mcp
+  # TODO: Uncomment when cmd/doopl-mcp is created
+  # mcp:build:
+  #   desc: Build the doopl-mcp server binary to ./bin/doopl-mcp
+  #   cmds:
+  #     - mkdir -p bin
+  #     - go build -trimpath -ldflags="-s -w" -o bin/doopl-mcp ./cmd/doopl-mcp
+  #
+  # mcp:install:
+  #   desc: Install doopl-mcp server to $GOPATH/bin/doopl-mcp
+  #   cmds:
+  #     - go install -trimpath -ldflags="-s -w" ./cmd/doopl-mcp
+
+  release:snapshot:
+    desc: Build a snapshot release locally (for testing GoReleaser without tagging)
     cmds:
-      - go install -trimpath -ldflags="-s -w" ./cmd/doopl-mcp
+      - goreleaser release --snapshot --clean
+
+  release:check:
+    desc: Validate GoReleaser configuration
+    cmds:
+      - goreleaser check

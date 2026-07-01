@@ -18,7 +18,15 @@ jobs:
         uses: actions/setup-go@v5
         with:
           go-version: ${{ matrix.go-version }}
+          cache: true
       - uses: arduino/setup-task@v2
+      - name: Cache Go binaries (revive, goverter)
+        uses: actions/cache@v4
+        with:
+          path: ~/go/bin
+          key: go-bins-${{ runner.os }}-revive-v1.14.0-goverter-v1.9.4
+          restore-keys: |
+            go-bins-${{ runner.os }}-
       - run: go mod download
       - name: Install tools
         run: task tools

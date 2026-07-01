@@ -3,11 +3,9 @@
 ![Go Version](https://img.shields.io/badge/Go-1.24%2B-00ADD8?style=flat-square)
 ![Test Coverage](https://img.shields.io/badge/coverage-48.1%25-yellow?style=flat-square)
 ![Code Quality](https://img.shields.io/badge/linter-revive-green?style=flat-square)
-![License](https://img.shields.io/badge/license-MIT%20%2B%20Commons%20Clause-blue?style=flat-square)
+![License](https://img.shields.io/badge/license-MIT-blue?style=flat-square)
 
 An idiomatic Go client for the [DeepL API v3](https://developers.deepl.com), usable as a **library**, **CLI**, or **MCP server for AI clients**.
-
-**Version:** 0.0.1 — Initial release. Full DeepL v3 coverage: text, documents, glossaries, languages, usage, and text rephrasing. All public APIs fully documented with godoc on [pkg.go.dev](https://pkg.go.dev/github.com/arashackdev/doopl).
 
 ## Use with Claude & AI Clients (MCP)
 
@@ -148,11 +146,11 @@ Claude:
 
 ### Available Tools
 
-| Tool | What It Does |
-|------|-------------|
+| Tool        | What It Does                                                                                  |
+| ----------- | --------------------------------------------------------------------------------------------- |
 | `translate` | Translate text to a target language, optionally with source language, formality, and glossary |
-| `languages` | List supported languages for translate/document/glossary/write resources |
-| `usage` | Check character and document quota usage |
+| `languages` | List supported languages for translate/document/glossary/write resources                      |
+| `usage`     | Check character and document quota usage                                                      |
 
 **Details:** See the full [AI Integration Guide](https://github.com/arashackdev/doopl/blob/main/.claude/AI-INTEGRATION.md) for input/output specs, examples, and advanced setup.
 
@@ -264,12 +262,3 @@ See [`_examples/`](./_examples/) for runnable examples:
 - `glossary.go` — glossary CRUD and usage
 
 Build and run with `go run -tags=ignore _examples/translate.go`.
-
-## License
-
-MIT License with Commons Clause (no commercial usage). See [LICENSE](./LICENSE) file.
-
-**Personal/educational use:** ✅ Free
-**Commercial use:** Requires prior permission/negotiation
-
-For questions about commercial licensing, open an issue.

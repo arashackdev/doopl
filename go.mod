@@ -1,6 +1,6 @@
 module github.com/arashackdev/doopl
 
-go 1.24
+go 1.24.0
 
 require (
 	github.com/jmattheis/goverter v1.9.4

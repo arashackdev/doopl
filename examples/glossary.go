@@ -9,8 +9,8 @@ import (
 	"log"
 	"os"
 
-	"github.com/arashackdev/doopl/pkg/deepl"
 	"github.com/arashackdev/doopl/model"
+	"github.com/arashackdev/doopl/pkg/deepl"
 )
 
 // Example: Glossary management (create, list, translate with glossary).

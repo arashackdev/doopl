@@ -284,12 +284,49 @@ See **[`.claude/AI-INTEGRATION.md`](./.claude/AI-INTEGRATION.md)** for:
 
 **Current:** 0.0.1
 
+### Tooling Versions
+
+Dev tools (goverter, revive) are pinned in two places for reproducibility:
+- `go.mod`: Listed as `// +build tools` dependencies (tracked by `tools.go`)
+- `Taskfile.yml`: `REVIVE_VERSION` and `GOVERTER_VERSION` variables
+
+To update a tool:
+1. Edit `tools.go` to import the new version
+2. Run `go mod tidy` to update `go.mod`
+3. Extract the version from `go.mod` and update `Taskfile.yml` vars
+4. Run `task ci` to verify everything works
+
 ### To release
-1. All code changes committed
-2. `task ci` passes locally
-3. Tag: `git tag v0.0.1`
-4. Push: `git push origin v0.0.1`
-5. GitHub Actions: auto-builds and publishes to pkg.go.dev
+
+1. **All code changes committed and tests passing:**
+   ```bash
+   task ci  # Local verification
+   ```
+
+2. **Tag the release:**
+   ```bash
+   git tag v0.0.1
+   git push origin v0.0.1
+   ```
+
+3. **GitHub Actions does the rest:**
+   - `release.yml` workflow automatically:
+     - Builds CLI and MCP server for Linux (amd64, arm64), macOS (amd64, arm64), Windows (amd64)
+     - Creates a GitHub Release with all binaries
+     - Triggers pkg.go.dev indexing (automatic; no action needed)
+
+4. **Users can then install via:**
+   ```bash
+   go get github.com/arashackdev/doopl@v0.0.1
+   go install github.com/arashackdev/doopl/cmd/doopl@v0.0.1
+   ```
+
+### pkg.go.dev Publishing
+
+No setup required. pkg.go.dev automatically:
+- Polls GitHub for new tags matching `v*`
+- Indexes the release within seconds
+- Makes godoc available at `https://pkg.go.dev/github.com/arashackdev/doopl@v0.0.1`
 
 ### Versioning
 - Follows semantic versioning (MAJOR.MINOR.PATCH)

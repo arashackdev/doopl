@@ -4,6 +4,8 @@ version: "3"
 vars:
   MODULE: github.com/arashackdev/doopl
   GOVERTER_PKGS: ./internal/convert/... ./cmd/doopl/internal/convert/...
+  REVIVE_VERSION: v1.15.0
+  GOVERTER_VERSION: v1.9.4
 
 tasks:
   default:
@@ -16,10 +18,10 @@ tasks:
       - task: test
 
   tools:
-    desc: Install pinned dev tools (revive, goverter, golangci stack not used — revive only)
+    desc: Install pinned dev tools (revive, goverter) — versions are tracked in vars
     cmds:
-      - go install github.com/mgechev/revive@latest
-      - go install github.com/jmattheis/goverter/cmd/goverter@latest
+      - go install github.com/mgechev/revive@{{.REVIVE_VERSION}}
+      - go install github.com/jmattheis/goverter/cmd/goverter@{{.GOVERTER_VERSION}}
 
   fmt:
     desc: Format all Go source
@@ -37,9 +39,9 @@ tasks:
       - go vet ./...
 
   lint:
-    desc: Run revive against the whole module
+    desc: Run revive against the whole module (excludes generated files and mocks)
     cmds:
-      - revive -config revive.toml -formatter friendly -exclude internal/convert/converter_gen.go -exclude cmd/doopl/internal/convert/converter_gen.go ./...
+      - revive -config revive.toml -formatter friendly -exclude './internal/convert/converter_gen.go' -exclude './cmd/doopl/internal/convert/converter_gen.go' -exclude './internal/interfaces/mock_*.go' ./...
 
   generate:
     desc: Regenerate all goverter converters

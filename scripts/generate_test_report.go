@@ -1,3 +1,4 @@
+//go:build ignore
 // +build ignore
 
 // generate_test_report reads a test-report.json from go test -json output

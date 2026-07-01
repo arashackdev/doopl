@@ -19,4 +19,7 @@ jobs:
           go-version: ${{ matrix.go-version }}
       - uses: arduino/setup-task@v2
       - run: go mod download
-      - run: task ci
+      - name: Install tools
+        run: task tools
+      - name: Run CI suite
+        run: task ci

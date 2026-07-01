@@ -101,12 +101,3 @@ tasks:
     desc: Install doopl-mcp server to $GOPATH/bin/doopl-mcp
     cmds:
       - go install -trimpath -ldflags="-s -w" ./cmd/doopl-mcp
-
-  ci:
-    desc: Everything CI runs on a PR
-    cmds:
-      - task: fmt:check
-      - task: vet
-      - task: lint
-      - task: generate:check
-      - task: test

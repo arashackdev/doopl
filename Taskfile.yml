@@ -41,7 +41,7 @@ tasks:
   lint:
     desc: Run revive against the whole module (excludes generated files)
     cmds:
-      - revive -config revive.toml -formatter friendly ./pkg/deepl/... ./internal/apimodel/... ./internal/transport/... ./internal/config/... ./cmd/doopl/main.go ./cmd/doopl/internal/entity/...
+      - revive -config revive.toml -formatter friendly ./pkg/deepl/... ./internal/apimodel/... ./internal/transport/... ./internal/config/... ./cmd/doopl/...* ./cmd/doopl/internal/entity/...
 
   generate:
     desc: Regenerate all goverter converters (runs go mod tidy to ensure consistency)

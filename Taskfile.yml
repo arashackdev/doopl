@@ -101,17 +101,16 @@ tasks:
     cmds:
       - go install -trimpath -ldflags="-s -w" ./cmd/doopl
 
-  # TODO: Uncomment when cmd/doopl-mcp is created
-  # mcp:build:
-  #   desc: Build the doopl-mcp server binary to ./bin/doopl-mcp
-  #   cmds:
-  #     - mkdir -p bin
-  #     - go build -trimpath -ldflags="-s -w" -o bin/doopl-mcp ./cmd/doopl-mcp
-  #
-  # mcp:install:
-  #   desc: Install doopl-mcp server to $GOPATH/bin/doopl-mcp
-  #   cmds:
-  #     - go install -trimpath -ldflags="-s -w" ./cmd/doopl-mcp
+  mcp:build:
+    desc: Build the doopl-mcp server binary to ./bin/doopl-mcp
+    cmds:
+      - mkdir -p bin
+      - go build -trimpath -ldflags="-s -w" -o bin/doopl-mcp ./cmd/doopl-mcp
+
+  mcp:install:
+    desc: Install doopl-mcp server to $GOPATH/bin/doopl-mcp
+    cmds:
+      - go install -trimpath -ldflags="-s -w" ./cmd/doopl-mcp
 
   release:snapshot:
     desc: Build a snapshot release locally (for testing GoReleaser without tagging)

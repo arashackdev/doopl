@@ -5,7 +5,7 @@ package interfaces
 import (
 	context "context"
 
-	apimodel "github.com/arashackdev/doopl/internal/apimodel"
+	apimodel "github.com/arashackdev/doopl/v3/apimodel"
 
 	mock "github.com/stretchr/testify/mock"
 )

@@ -17,15 +17,23 @@
 - **Idiomatic Go:** functional options, sentinel errors with `errors.Is`/`errors.As`, free/pro endpoint auto-detection
 - **Zero hand-written converters:** mappings generated via `goverter` from interface declarations
 
-## Development Stack
+## Development Resources
+
+For comprehensive development guide, see **[`docs/DEVELOPMENT.md`](./docs/DEVELOPMENT.md)**. It covers:
+- Architecture and three-layer separation
+- Adding new endpoints
+- Testing strategy
+- Code standards and godoc conventions
+- Release process
 
 | Tool | Purpose | Config |
 |------|---------|--------|
 | Go 1.24+ | Language | `go.mod` |
 | Task | Task runner | `Taskfile.yml` |
 | revive | Linter | `revive.toml` |
-| goverter | Code generation | interface declarations in `internal/convert/` + `cmd/deepl/internal/convert/` |
+| goverter | Code generation | interface declarations in `internal/convert/` + `cmd/doopl/internal/convert/` |
 | urfave/cli | CLI framework | `cmd/doopl/main.go` |
+| lipgloss | TUI output | `cmd/doopl/internal/output/formatter.go` |
 
 ## Quick Start
 

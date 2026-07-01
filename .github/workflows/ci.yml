@@ -31,4 +31,4 @@ jobs:
       - name: Install tools
         run: task tools
       - name: Run CI suite
-        run: task
+        run: task ci

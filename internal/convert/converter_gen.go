@@ -4,8 +4,8 @@
 package convert
 
 import (
-	apimodel "github.com/arashackdev/doopl/internal/apimodel"
 	model "github.com/arashackdev/doopl/pkg/model"
+	apimodel "github.com/arashackdev/doopl/v3/apimodel"
 )
 
 type APIToModelImpl struct{}

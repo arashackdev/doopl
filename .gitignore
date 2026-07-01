@@ -45,7 +45,10 @@ vendor/
 
 # Development notes (not shipped)
 MILESTONES.md
-docs/build-plan.md
+
+# Docs — keep DEVELOPMENT.md in git, ignore other scattered docs
+docs/*
+!docs/DEVELOPMENT.md
 
 # Generated mocks
 internal/mocks/
@@ -56,4 +59,3 @@ REVIEW_SUMMARY.md
 REFACTOR_CHECKLIST.md
 FILES_TO_IGNORE.md
 QUICK_REFERENCE.txt
-docs/TEST_*

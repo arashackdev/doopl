@@ -7,9 +7,9 @@ import (
 	"io"
 	"net/http"
 
-	"github.com/arashackdev/doopl/internal/apimodel"
 	"github.com/arashackdev/doopl/internal/convert"
 	"github.com/arashackdev/doopl/pkg/model"
+	"github.com/arashackdev/doopl/v3/apimodel"
 )
 
 // apiToModel is the package-level converter instance used by every method

@@ -6,7 +6,7 @@ import (
 	"io"
 	"net/http"
 
-	"github.com/arashackdev/doopl/internal/apimodel"
+	"github.com/arashackdev/doopl/v3/apimodel"
 )
 
 // HTTPClient is a mockable interface for HTTP operations.

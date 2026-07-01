@@ -10,7 +10,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/arashackdev/doopl/internal/apimodel"
+	"github.com/arashackdev/doopl/v3/apimodel"
 )
 
 func TestTranslateText_Success(t *testing.T) {

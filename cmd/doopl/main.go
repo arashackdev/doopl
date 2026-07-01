@@ -15,6 +15,7 @@ import (
 	"os"
 
 	"github.com/arashackdev/doopl/cmd/doopl/internal/convert"
+	_ "github.com/charmbracelet/lipgloss"
 	"github.com/urfave/cli/v2"
 )
 
@@ -32,7 +33,7 @@ func main() {
 			},
 			&cli.StringFlag{
 				Name:  "output",
-				Usage: "global output format: json|table|text",
+				Usage: "output format: text (plain)|tui (rich terminal)|json (structured)",
 				Value: "text",
 			},
 		},
@@ -44,6 +45,7 @@ func main() {
 			rephraseCommand(),
 			languagesCommand(),
 			usageCommand(),
+			doctorCommand(),
 		},
 	}
 

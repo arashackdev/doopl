@@ -3,9 +3,10 @@ package main
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 
+	"github.com/arashackdev/doopl/cmd/doopl/internal/convert"
+	"github.com/arashackdev/doopl/cmd/doopl/internal/output"
 	deepl "github.com/arashackdev/doopl/pkg/deepl"
 	"github.com/urfave/cli/v2"
 )
@@ -15,9 +16,6 @@ func usageCommand() *cli.Command {
 	return &cli.Command{
 		Name:  "usage",
 		Usage: "show API quota and usage",
-		Flags: []cli.Flag{
-			&cli.StringFlag{Name: "format", Usage: "output format: json|table", Value: "table"},
-		},
 		Action: func(c *cli.Context) error {
 			authKey, err := getAuthKey(c)
 			if err != nil {
@@ -34,14 +32,10 @@ func usageCommand() *cli.Command {
 				return err
 			}
 
-			if c.String("format") == "json" {
-				out, _ := json.Marshal(usage)
-				fmt.Println(string(out))
-			} else {
-				fmt.Printf("Characters:      %d / %d\n", usage.CharacterCount, usage.CharacterLimit)
-				fmt.Printf("Documents:       %d / %d\n", usage.DocumentCount, usage.DocumentLimit)
-				fmt.Printf("Team Documents:  %d / %d\n", usage.TeamDocumentCount, usage.TeamDocumentLimit)
-			}
+			converter := &convert.ModelToEntityImpl{}
+			row := converter.UsageRow(*usage)
+			formatter := output.NewFormatter(c.String("output"))
+			fmt.Print(formatter.FormatUsage(row))
 			return nil
 		},
 	}

@@ -3,13 +3,13 @@ package main
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"os"
 	"strings"
 
 	"github.com/arashackdev/doopl/cmd/doopl/internal/convert"
+	"github.com/arashackdev/doopl/cmd/doopl/internal/output"
 	deepl "github.com/arashackdev/doopl/pkg/deepl"
 	"github.com/urfave/cli/v2"
 )
@@ -115,35 +115,14 @@ func translateCommand(entity *convert.ModelToEntityImpl) *cli.Command {
 			}
 
 			rows := entity.TranslationRows(results)
-			output := ""
-
-			outfmt := c.String("output")
-
-			switch outfmt {
-			case "json":
-				data, _ := json.MarshalIndent(rows, "", "  ")
-				output = string(data)
-			case "table":
-				for _, row := range rows {
-					fmt.Printf("Text: %s\n", row.Text)
-					fmt.Printf("Detected Lang: %s\n", row.DetectedSourceLang)
-					fmt.Println()
-				}
-				if c.String("output-file") != "" {
-					return os.WriteFile(c.String("output-file"), []byte(output), 0o644)
-				}
-				return nil
-			default: // text
-				for _, row := range rows {
-					output += row.Text + "\n"
-				}
-			}
+			formatter := output.NewFormatter(c.String("output"))
+			formatted := formatter.FormatTranslations(rows)
 
 			if outputFile := c.String("output-file"); outputFile != "" {
-				return os.WriteFile(outputFile, []byte(output), 0o644)
+				return os.WriteFile(outputFile, []byte(formatted), 0o644)
 			}
 
-			fmt.Print(output)
+			fmt.Print(formatted)
 			return nil
 		},
 	}

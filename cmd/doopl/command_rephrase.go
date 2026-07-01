@@ -57,7 +57,12 @@ func rephraseCommand() *cli.Command {
 			case "json":
 				out, _ := json.MarshalIndent(results, "", "  ")
 				fmt.Println(string(out))
-			default:
+			case "tui":
+				// TUI: display each result in a box
+				for _, r := range results {
+					fmt.Println(r.Text)
+				}
+			default: // text
 				for _, r := range results {
 					fmt.Println(r.Text)
 				}

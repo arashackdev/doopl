@@ -1,0 +1,29 @@
+# Don't include build artifacts
+bin/
+dist/
+.task/
+.testcache/
+
+# Don't include IDE files
+.vscode/
+.idea/
+.DS_Store
+*.swp
+
+# Don't include development-only files
+.config/
+.claude/
+MILESTONES.md
+REFACTOR_CHECKLIST.md
+REVIEW_SUMMARY.md
+docs/build-plan.md
+
+# Don't include test files (optional—many packages do include them)
+*_test.go
+
+# Don't include local overrides
+.env
+.env.local
+
+# Don't include CI config (optional)
+.github/

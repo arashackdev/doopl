@@ -5,8 +5,8 @@ import (
 	"encoding/json"
 	"io"
 
-	"github.com/arashackdev/doopl/internal/apimodel"
 	"github.com/arashackdev/doopl/internal/transport"
+	"github.com/arashackdev/doopl/v3/apimodel"
 )
 
 // transportRequest builds a transport.Request from a JSON (or pre-encoded)

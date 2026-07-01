@@ -7,8 +7,8 @@
 package convert
 
 import (
-	"github.com/arashackdev/doopl/internal/apimodel"
 	"github.com/arashackdev/doopl/pkg/model"
+	"github.com/arashackdev/doopl/v3/apimodel"
 )
 
 // APIToModel converts wire-format apimodel types into the public model

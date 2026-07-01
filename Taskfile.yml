@@ -18,6 +18,15 @@ tasks:
       - task: generate:check
       - task: test
 
+  ci:
+    desc: Run CI checks (used by GitHub Actions)
+    cmds:
+      - task: fmt:check
+      - task: vet
+      - task: lint
+      - task: generate:check
+      - task: test
+
   tools:
     desc: Install pinned dev tools (revive, goverter, goreleaser) — versions are tracked in vars
     cmds:
@@ -43,14 +52,13 @@ tasks:
   lint:
     desc: Run revive against the whole module (excludes generated files)
     cmds:
-      - revive -config revive.toml -formatter friendly ./pkg/deepl/... ./internal/apimodel/... ./internal/transport/... ./internal/config/... ./cmd/doopl/... ./cmd/doopl/internal/entity/...
+      - revive -config revive.toml -formatter friendly ./pkg/deepl/... ./internal/apimodel/... ./internal/transport/... ./internal/config/... ./cmd/doopl/command*.go ./cmd/doopl/main.go ./cmd/doopl/auth.go ./cmd/doopl/output.go ./cmd/doopl/commands.go ./cmd/doopl/internal/entity/... ./cmd/doopl/internal/output/...
 
   generate:
     desc: Regenerate all goverter converters (runs go mod tidy to ensure consistency)
     cmds:
       - go mod tidy
       - go generate ./...
-      - git checkout go.mod  # Restore pinned Go version (set in go.mod manually)
 
   generate:check:
     desc: Fail if generated converters are stale (CI use — run generate, then git diff)

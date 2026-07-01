@@ -9,8 +9,8 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/arashackdev/doopl/internal/apimodel"
 	"github.com/arashackdev/doopl/pkg/model"
+	"github.com/arashackdev/doopl/v3/apimodel"
 )
 
 // CreateGlossary creates a new glossary with the given name and entries.

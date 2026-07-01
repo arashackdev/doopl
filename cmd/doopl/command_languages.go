@@ -3,10 +3,10 @@ package main
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
-	"strings"
 
+	"github.com/arashackdev/doopl/cmd/doopl/internal/convert"
+	"github.com/arashackdev/doopl/cmd/doopl/internal/output"
 	deepl "github.com/arashackdev/doopl/pkg/deepl"
 	"github.com/urfave/cli/v2"
 )
@@ -17,9 +17,6 @@ func languagesCommand() *cli.Command {
 		Name:      "languages",
 		Usage:     "list supported languages",
 		ArgsUsage: "[translate|document|glossary|write]",
-		Flags: []cli.Flag{
-			&cli.StringFlag{Name: "format", Usage: "output format: json|table", Value: "table"},
-		},
 		Action: func(c *cli.Context) error {
 			resource := "translate"
 			if c.NArg() > 0 {
@@ -41,16 +38,10 @@ func languagesCommand() *cli.Command {
 				return err
 			}
 
-			if c.String("format") == "json" {
-				out, _ := json.Marshal(langs)
-				fmt.Println(string(out))
-			} else {
-				fmt.Printf("%-5s %s\n", "CODE", "NAME")
-				fmt.Println(strings.Repeat("-", 50))
-				for _, lang := range langs {
-					fmt.Printf("%-5s %s\n", lang.Code, lang.Name)
-				}
-			}
+			converter := &convert.ModelToEntityImpl{}
+			rows := converter.LanguageRows(langs)
+			formatter := output.NewFormatter(c.String("output"))
+			fmt.Print(formatter.FormatLanguages(rows))
 			return nil
 		},
 	}

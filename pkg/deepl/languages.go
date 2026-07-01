@@ -7,8 +7,8 @@ import (
 	"io"
 	"net/http"
 
-	"github.com/arashackdev/doopl/internal/apimodel"
 	"github.com/arashackdev/doopl/pkg/model"
+	"github.com/arashackdev/doopl/v3/apimodel"
 )
 
 // Languages returns the list of supported languages for the given resource type.

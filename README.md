@@ -1,8 +1,13 @@
-# doopl
+# doopl — DeepL API v3 Client for Go
 
-An idiomatic Go client for the [DeepL API](https://developers.deepl.com), usable as a **library**, **CLI**, or **MCP server for AI clients**.
+![Go Version](https://img.shields.io/badge/Go-1.24%2B-00ADD8?style=flat-square)
+![Test Coverage](https://img.shields.io/badge/coverage-48.1%25-yellow?style=flat-square)
+![Code Quality](https://img.shields.io/badge/linter-revive-green?style=flat-square)
+![License](https://img.shields.io/badge/license-MIT%20%2B%20Commons%20Clause-blue?style=flat-square)
 
-> **Version:** 0.0.1 — initial release. Supports text translation, document translation, glossaries, languages, usage, and text rephrasing (Write API). All public APIs are fully documented with godoc available on [pkg.go.dev](https://pkg.go.dev/github.com/arashackdev/doopl).
+An idiomatic Go client for the [DeepL API v3](https://developers.deepl.com), usable as a **library**, **CLI**, or **MCP server for AI clients**.
+
+**Version:** 0.0.1 — Initial release. Full DeepL v3 coverage: text, documents, glossaries, languages, usage, and text rephrasing. All public APIs fully documented with godoc on [pkg.go.dev](https://pkg.go.dev/github.com/arashackdev/doopl).
 
 ## Use with Claude & AI Clients (MCP)
 
@@ -151,7 +156,7 @@ Claude:
 
 **Details:** See the full [AI Integration Guide](https://github.com/arashackdev/doopl/blob/main/.claude/AI-INTEGRATION.md) for input/output specs, examples, and advanced setup.
 
-## CLI usage
+## CLI Usage
 
 ```sh
 go install github.com/arashackdev/doopl/cmd/doopl@latest
@@ -166,9 +171,22 @@ doopl languages
 
 # Check API usage
 doopl usage
+
+# Check API health (light and verbose diagnostics)
+doopl doctor
+doopl doctor --verbose
+
+# Different output formats (text, tui, json)
+doopl translate --to DE --output tui "Hello"
+doopl languages --output json
 ```
 
 The CLI is a thin `urfave/cli` wrapper — every flag maps directly to a library option. No translation logic lives in `cmd/doopl`; it's proof the library is genuinely embeddable, not a parallel implementation.
+
+**Output Modes:**
+- **text** (default) — Plain text for scripts and terminals
+- **tui** — Rich terminal UI with colors and formatting (lipgloss)
+- **json** — Structured output for programmatic use
 
 ## Features
 
@@ -180,26 +198,31 @@ The CLI is a thin `urfave/cli` wrapper — every flag maps directly to a library
 - ✅ **Languages** — list for translate/document/glossary/write resources
 - ✅ **Usage** — character and document quotas
 - ✅ **Write API** — rephrase with tone and emoji control
+- ✅ **Health Check** — `doctor` command to verify connectivity and quota
 
 ### Production Ready
 
-- Free/Pro endpoint auto-detection from API key
-- Exponential backoff + jitter on rate limits and errors
-- Retry-After header support
-- Context cancellation throughout
-- Sentinel errors with errors.Is/errors.As
-- Concurrent-safe Client
-- Full godoc on all APIs
+- **Robust Networking** — exponential backoff + jitter on rate limits; Retry-After header support
+- **Context Support** — cancellation throughout; proper deadline handling
+- **Error Handling** — sentinel errors with `errors.Is()`/`errors.As()`
+- **Concurrency Safe** — Client safe for concurrent use (no locks needed)
+- **Auto-Detection** — free/pro endpoint detected from API key
+- **Fully Documented** — godoc on all public APIs; zero public API without docs
 
 ## Architecture
 
-See [`docs/scope-and-checklist.md`](./docs/scope-and-checklist.md) for rationale. The project enforces a three-layer separation:
+The project enforces a **three-layer separation** to keep concerns isolated:
 
-- **apimodel** (internal): wire-format types matching the DeepL API exactly
-- **model**: public, Go-idiomatic domain types
-- **entity** (CLI): display types for table/JSON output
+- **Wire Format** (`v3/apimodel/`) — exact DeepL API shape, never exposed publicly
+- **Domain Model** (`pkg/model/`) — idiomatic Go types, public API for library consumers
+- **CLI Entity** (`cmd/doopl/internal/entity/`) — display types for terminal/JSON output
 
-Each layer is isolated via generated converters (`goverter`), so changes to the API surface don't cascade to consumer code. Converters are never hand-edited — they're automatically regenerated from interface declarations.
+Each layer is isolated via **generated converters** (`goverter`). Converters are never hand-edited — they're automatically regenerated from interface declarations. This ensures:
+- API changes don't cascade to consumer code
+- No silent field mismatches
+- CLI concerns stay separated from library concerns
+
+See [`docs/DEVELOPMENT.md`](./docs/DEVELOPMENT.md) for detailed architecture guide.
 
 ## Development
 
@@ -207,16 +230,26 @@ Each layer is isolated via generated converters (`goverter`), so changes to the 
 task fmt           # format code
 task vet           # run go vet
 task generate      # regenerate converters
-task lint          # lint with revive
-task test          # run tests
+task lint          # lint with revive (enforces 100% godoc coverage)
+task test          # run tests (48.1% coverage, race detector enabled)
 task ci            # full local CI suite
 task cli:build     # build the CLI
 task mcp:build     # build MCP server for AI clients
 ```
 
-Tests run against an in-process `httptest` server with 48% coverage. All exported symbols are documented with godoc.
+### Code Quality
 
-See [`CLAUDE.md`](./CLAUDE.md) for development guide and [`MILESTONES.md`](./MILESTONES.md) for feature completion status.
+- **Test Coverage:** 48.1% of statements in library code
+- **Linting:** revive with strict rules (godoc required for all exports)
+- **Type Safety:** Full godoc on all public APIs; zero hand-written converters
+- **Concurrency:** Race detector on all tests; Client is concurrent-safe
+- **Minimum Go:** 1.24+
+
+### Documentation
+
+- **Development Guide:** See [`docs/DEVELOPMENT.md`](./docs/DEVELOPMENT.md) for architecture, testing, and contributing
+- **API Docs:** All public symbols documented with godoc at [pkg.go.dev](https://pkg.go.dev/github.com/arashackdev/doopl)
+- **MCP Setup:** See [`CLAUDE.md`](./CLAUDE.md) for AI client integration
 
 ## Minimum Go version
 

@@ -26,6 +26,14 @@ For comprehensive development guide, see **[`docs/DEVELOPMENT.md`](./docs/DEVELO
 - Code standards and godoc conventions
 - Release process
 
+**Additional Documentation (in `docs/` directory):**
+- `TESTING_PLAYBOOK.md` — Complete testing guide with your own DeepL API key
+- `CI_VERIFICATION.md` — CI/CD pipeline verification and troubleshooting
+- `REVIEW_SUMMARY.md` — Code review, architecture assessment, improvements
+- `QUICK_TEST.sh` — One-command validation script
+
+> **📌 Documentation Policy:** All docs must go in `docs/` directory. Never scatter `.md` or `.sh` files in the project root. See `.gitignore` for enforcement patterns.
+
 | Tool | Purpose | Config |
 |------|---------|--------|
 | Go 1.24+ | Language | `go.mod` |
@@ -376,6 +384,42 @@ This runs `go generate ./...`, which invokes `goverter` on all interfaces tagged
 
 ## Documentation Standards
 
+### Documentation Location Policy (ENFORCED)
+
+**All documentation goes in `docs/` directory — NEVER scatter .md or .sh files in the project root.**
+
+Exceptions (project root only):
+- `README.md` — Project overview
+- `CLAUDE.md` — This file (Claude setup guide)
+- `LICENSE.md` — License text
+
+**Enforcement:**
+- `.gitignore` patterns prevent scattered `*.md` and `*.sh` in root from being committed
+- Pattern: `/*.md` and `/*.sh` (root-level only, allowed files are exceptions via `!` rules)
+- CI will fail if scattered docs appear in git tree
+
+**Examples:**
+- ❌ TESTING_PLAYBOOK.md (root) → ✅ docs/TESTING_PLAYBOOK.md
+- ❌ QUICK_TEST.sh (root) → ✅ docs/QUICK_TEST.sh
+- ❌ REVIEW_SUMMARY.md (root) → ✅ docs/REVIEW_SUMMARY.md
+- ✅ README.md (root) — exception, stay here
+- ✅ CLAUDE.md (root) — exception, stay here
+
+**When creating new docs or scripts:**
+1. **Create in docs/**: `docs/MY_GUIDE.md` or `docs/my_script.sh`
+2. **Update docs/DEVELOPMENT.md**: Add entry to the documentation index
+3. **Update code comments**: If the doc explains a design decision, add a comment to the relevant code pointing to `docs/MY_GUIDE.md`
+4. **Never run `git add *.md` or `git add *.sh` at root level** — `.gitignore` patterns will prevent commit
+5. **Local pre-commit hook** (optional, for strict enforcement):
+   ```bash
+   # Create in .git/hooks/pre-commit:
+   #!/bin/bash
+   if git diff --cached --name-only | grep -qE '^[^/]+\.(md|sh)$'; then
+     echo "❌ Scattered docs/scripts in root are prohibited. Move to docs/ directory."
+     exit 1
+   fi
+   ```
+
 ### Godoc comments
 - One-line summary at the start, no punctuation (reads as "X is ...")
 - For functions: describe inputs, outputs, and notable errors
@@ -393,6 +437,18 @@ type TextResult struct {
 // It returns translation results for each input text, in order.
 // If ctx is canceled, TranslateText returns the context error.
 func (c *Client) TranslateText(ctx context.Context, texts []string, targetLang string, opts ...TranslateTextOption) ([]model.TextResult, error)
+```
+
+### Code Comments (Link to Docs, Don't Duplicate)
+- If the comment explains *why* a decision was made, add a code comment
+- If the comment is a *how-to guide or reference*, put it in `docs/` and link from code
+- Comments are for *why* (constraints, non-obvious decisions), not *what* (code already shows that)
+
+**Example:**
+```go
+// For glossary naming conventions, see docs/DESIGN_DECISIONS.md#glossary-ids
+// We use base32 to avoid URL encoding issues in API responses.
+const GlossaryIDFormat = "base32"
 ```
 
 ### No hand-written comments on logic

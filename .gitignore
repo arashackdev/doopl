@@ -26,8 +26,6 @@ go.work
 # Build artifacts
 bin/
 dist/
-doopl
-cmd/doopl/doopl
 
 # Task outputs
 .task/

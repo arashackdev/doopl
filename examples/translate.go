@@ -12,10 +12,12 @@ import (
 // Example: Basic text translation.
 //
 // Run with:
-//   go run examples/translate.go
+//
+//	go run examples/translate.go
 //
 // Environment:
-//   DEEPL_AUTH_KEY: Your DeepL API key
+//
+//	DEEPL_AUTH_KEY: Your DeepL API key
 func exampleTranslate() {
 	authKey := os.Getenv("DEEPL_AUTH_KEY")
 	if authKey == "" {

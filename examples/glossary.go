@@ -13,10 +13,12 @@ import (
 // Example: Glossary management (create, list, translate with glossary).
 //
 // Run with:
-//   go run examples/glossary.go
+//
+//	go run examples/glossary.go
 //
 // Environment:
-//   DEEPL_AUTH_KEY: Your DeepL API key
+//
+//	DEEPL_AUTH_KEY: Your DeepL API key
 //
 // This example demonstrates:
 // - Creating a new glossary with custom term pairs
@@ -46,11 +48,11 @@ func exampleGlossary() {
 		"EN",
 		"DE",
 		model.GlossaryEntries{
-			"API":              "Schnittstelle",
-			"frontend":         "Benutzeroberfläche",
-			"backend":          "Backend-Server",
-			"authentication":   "Authentifizierung",
-			"encryption":       "Verschlüsselung",
+			"API":            "Schnittstelle",
+			"frontend":       "Benutzeroberfläche",
+			"backend":        "Backend-Server",
+			"authentication": "Authentifizierung",
+			"encryption":     "Verschlüsselung",
 		},
 	)
 	if err != nil {
@@ -73,8 +75,8 @@ func exampleGlossary() {
 		log.Fatal("translate:", err)
 	}
 
-	fmt.Printf("Source: %s\n", results[0].Text)
-	fmt.Printf("German: %s\n\n", results[0].Text)
+	fmt.Printf("Source: %s\n", "Our API provides a secure authentication system for the frontend and backend.")
+	fmt.Printf("German: %s\n", results[0].Text)
 
 	// List glossaries
 	fmt.Println("📋 Listing glossaries...")
@@ -87,10 +89,10 @@ func exampleGlossary() {
 	}
 
 	// Clean up
-	fmt.Printf("\n🗑️ Deleting glossary %s...\n", glossary.GlossaryID)
+	fmt.Printf("🗑️ Deleting glossary %s...\n", glossary.GlossaryID)
 	err = client.DeleteGlossary(ctx, glossary.GlossaryID)
 	if err != nil {
 		log.Fatal("delete glossary:", err)
 	}
-	fmt.Println("✓ Done!\n")
+	fmt.Println("✓ Done!")
 }

@@ -22,11 +22,11 @@
 //
 // # MCP Tools Exposed
 //
-// - translate: Translate text or content into a target language. Supports all
-//   doopl translation options (formality, glossaries, context, etc).
-// - languages: List languages supported for a given resource type
-//   (translate, document, glossary, write).
-// - usage: Check API quota and current usage (characters, documents, limits).
+//   - translate: Translate text or content into a target language. Supports all
+//     doopl translation options (formality, glossaries, context, etc).
+//   - languages: List languages supported for a given resource type
+//     (translate, document, glossary, write).
+//   - usage: Check API quota and current usage (characters, documents, limits).
 //
 // # Configuration
 //

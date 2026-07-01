@@ -28,11 +28,11 @@ type Formality string
 // The strict "more"/"less" variants will error if the target language does not
 // support the requested formality.
 const (
-	FormalityDefault    Formality = "default"       // Use DeepL's default formality
-	FormalityMore       Formality = "more"          // Formal (error if unsupported)
-	FormalityLess       Formality = "less"          // Informal (error if unsupported)
-	FormalityPreferMore Formality = "prefer_more"   // Prefer formal, fallback to neutral
-	FormalityPreferLess Formality = "prefer_less"   // Prefer informal, fallback to neutral
+	FormalityDefault    Formality = "default"     // Use DeepL's default formality
+	FormalityMore       Formality = "more"        // Formal (error if unsupported)
+	FormalityLess       Formality = "less"        // Informal (error if unsupported)
+	FormalityPreferMore Formality = "prefer_more" // Prefer formal, fallback to neutral
+	FormalityPreferLess Formality = "prefer_less" // Prefer informal, fallback to neutral
 )
 
 // SplitSentences controls how the input is split into sentences before
@@ -42,8 +42,8 @@ type SplitSentences string
 
 // SplitSentences options.
 const (
-	SplitSentencesOff        SplitSentences = "0"         // Do not split (translate whole input as one segment)
-	SplitSentencesOn         SplitSentences = "1"         // Split on sentences and newlines (default)
+	SplitSentencesOff        SplitSentences = "0"          // Do not split (translate whole input as one segment)
+	SplitSentencesOn         SplitSentences = "1"          // Split on sentences and newlines (default)
 	SplitSentencesNoNewlines SplitSentences = "nonewlines" // Split on sentences, preserve newlines
 )
 
@@ -55,8 +55,8 @@ type ModelType string
 
 // ModelType options.
 const (
-	ModelTypeQualityOptimized ModelType = "quality_optimized"   // Prioritize quality (slower)
-	ModelTypeLatencyOptimized ModelType = "latency_optimized"    // Prioritize speed (lower latency)
+	ModelTypeQualityOptimized ModelType = "quality_optimized"        // Prioritize quality (slower)
+	ModelTypeLatencyOptimized ModelType = "latency_optimized"        // Prioritize speed (lower latency)
 	ModelTypePreferQuality    ModelType = "prefer_quality_optimized" // Prefer quality, allow fallback to latency
 )
 

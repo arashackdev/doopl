@@ -16,7 +16,8 @@ import (
 //   - document: Document translation workflow (reference)
 //
 // Environment:
-//   DEEPL_AUTH_KEY: Your DeepL API key (required)
+//
+//	DEEPL_AUTH_KEY: Your DeepL API key (required)
 func main() {
 	flag.Parse()
 

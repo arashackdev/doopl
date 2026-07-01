@@ -430,16 +430,7 @@ See `docs/scope-and-checklist.md` for detailed status on each milestone.
 
 ## License
 
-MIT + Commons Clause. See [LICENSE](./LICENSE).
-
-**What you can do:**
-- Use, modify, and distribute for personal/educational use
-- Contribute via pull requests
-
-**What you cannot do:**
-- Sell the software or services based on it commercially without permission
-
-For commercial licensing inquiries, open an issue.
+MIT. See [LICENSE](./LICENSE) for details.
 
 ## Support
 

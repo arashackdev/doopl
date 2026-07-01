@@ -1,9 +1,70 @@
-// Command doopl-mcp is an MCP (Model Context Protocol) server that exposes
-// doopl's DeepL translation capabilities to Claude, Claude Desktop, and other
-// MCP-compatible AI clients.
+// Command doopl-mcp is a Model Context Protocol (MCP) server that exposes
+// DeepL translation capabilities to Claude, Claude Desktop, and other
+// MCP-compatible AI clients. It enables seamless translation within AI workflows
+// without requiring direct API integration.
 //
-// It implements the MCP protocol over stdio with JSON-RPC transport, providing
-// tools for translate, languages, and usage queries.
+// # Protocol
+//
+// Implements MCP v1 over stdio with JSON-RPC 2.0 transport. The server receives
+// MCP requests as JSON lines on stdin and writes responses on stdout. Compliant
+// with the Model Context Protocol specification:
+// https://modelcontextprotocol.io/
+//
+// # Startup
+//
+// Start the server by setting DEEPL_AUTH_KEY and running:
+//
+//	export DEEPL_AUTH_KEY="your-api-key"
+//	./doopl-mcp serve
+//
+// The server is designed to be long-lived; it reads requests from stdin and
+// writes responses to stdout in a streaming fashion.
+//
+// # MCP Tools Exposed
+//
+// - translate: Translate text or content into a target language. Supports all
+//   doopl translation options (formality, glossaries, context, etc).
+// - languages: List languages supported for a given resource type
+//   (translate, document, glossary, write).
+// - usage: Check API quota and current usage (characters, documents, limits).
+//
+// # Configuration
+//
+// Authentication:
+// - DEEPL_AUTH_KEY: Required. Your DeepL API key.
+// - DEEPL_SERVER_URL: Optional. Override API endpoint (for testing or custom deployments).
+//
+// # Usage with Claude Desktop
+//
+// Configure in ~/.claude/settings.json:
+//
+//	{
+//	  "mcpServers": {
+//	    "doopl": {
+//	      "command": "/path/to/doopl-mcp",
+//	      "args": ["serve"],
+//	      "env": { "DEEPL_AUTH_KEY": "your-key" }
+//	    }
+//	  }
+//	}
+//
+// Restart Claude Desktop to load the server. New translation tools will appear in the
+// assistant's tool menu.
+//
+// # Error Handling
+//
+// MCP protocol errors are returned as JSON-RPC error objects with:
+// - code: JSON-RPC error code (e.g., -32600 for invalid request)
+// - message: Human-readable error description
+// - data: Optional error details (e.g., API response body)
+//
+// # Concurrency
+//
+// The server processes requests serially (one at a time), making it safe for
+// single-threaded clients. If a request hangs, the entire server is blocked.
+//
+// For details on the MCP protocol, see:
+// https://modelcontextprotocol.io/introduction
 package main
 
 import (

@@ -15,26 +15,31 @@ builds:
     goarch:
       - amd64
       - arm64
+    env:
+      - CGO_ENABLED=0
+    goamd64: v3
     ignore:
       - goos: windows
 
-  # TODO: Uncomment when cmd/doopl-mcp is created
-  # - id: doopl-mcp
-  #   main: ./cmd/doopl-mcp
-  #   binary: doopl-mcp
-  #   ldflags:
-  #     - -s -w
-  #     - -X main.Version={{.Version}}
-  #   goos:
-  #     - linux
-  #     - darwin
-  #     - windows
-  #   goarch:
-  #     - amd64
-  #     - arm64
-  #   ignore:
-  #     - goos: windows
-  #       goarch: arm64
+  - id: doopl-mcp
+    main: ./cmd/doopl-mcp
+    binary: doopl-mcp
+    ldflags:
+      - -s -w
+      - -X main.Version={{.Version}}
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - amd64
+      - arm64
+    env:
+      - CGO_ENABLED=0
+    goamd64: v3
+    ignore:
+      - goos: windows
+        goarch: arm64
 
 archives:
   - format: tar.gz

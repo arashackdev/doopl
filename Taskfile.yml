@@ -26,6 +26,7 @@ tasks:
       - task: lint
       - task: generate:check
       - task: test
+      - task: build
 
   tools:
     desc: Install pinned dev tools (revive, goverter, goreleaser) — versions are tracked in vars
@@ -52,7 +53,7 @@ tasks:
   lint:
     desc: Run revive against the whole module (excludes generated files)
     cmds:
-      - revive -config revive.toml -formatter friendly ./pkg/deepl/... ./internal/apimodel/... ./internal/transport/... ./internal/config/... ./cmd/doopl/command*.go ./cmd/doopl/main.go ./cmd/doopl/auth.go ./cmd/doopl/output.go ./cmd/doopl/commands.go ./cmd/doopl/internal/entity/... ./cmd/doopl/internal/output/...
+      - revive -config revive.toml -formatter friendly ./pkg/... ./internal/... ./cmd/...
 
   generate:
     desc: Regenerate all goverter converters (runs go mod tidy to ensure consistency)
@@ -121,33 +122,3 @@ tasks:
     desc: Validate GoReleaser configuration
     cmds:
       - goreleaser check
-
-  release:tag:
-    desc: Increment version tag by +1 patch version, tag as 'latest', and push both tags
-    cmds:
-      - cmd: |
-          # Get the latest numerical tag, or default to 0.0.0
-          LAST_TAG=$(git describe --tags --match="v*" 2>/dev/null | sed 's/^v//' | cut -d- -f1 || echo "0.0.0")
-
-          # Parse semantic version
-          IFS='.' read -r MAJOR MINOR PATCH <<< "$LAST_TAG"
-          PATCH=$((PATCH + 1))
-
-          # Create new tag
-          NEW_TAG="v${MAJOR}.${MINOR}.${PATCH}"
-
-          echo "Current tag: v$LAST_TAG"
-          echo "New tag: $NEW_TAG"
-
-          # Tag with the new version
-          git tag "$NEW_TAG"
-
-          # Tag as 'latest' (force update if it exists)
-          git tag -f latest
-
-          # Push both tags
-          git push origin "$NEW_TAG"
-          git push -f origin latest
-
-          echo "✓ Tagged $NEW_TAG and updated 'latest' tag"
-        sh: bash

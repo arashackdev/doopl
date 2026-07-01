@@ -5,6 +5,8 @@
 *.so
 *.so.*
 *.dylib
+doopl
+doopl-mcp
 
 # Test binary
 *.test

@@ -6,29 +6,71 @@ on:
   pull_request:
     branches: [main]
 
+permissions:
+  contents: write
+
 jobs:
   test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        go-version: [1.24.x]
+        go-version: ["1.24"]
     steps:
       - uses: actions/checkout@v6
-      - name: Setup Go ${{ matrix.go-version }}
+      - name: Setup Go
         uses: actions/setup-go@v5
         with:
           go-version: ${{ matrix.go-version }}
           cache: true
+          cache-dependency-path: go.sum
       - uses: arduino/setup-task@v2
       - name: Cache Go binaries (revive, goverter)
         uses: actions/cache@v4
         with:
           path: ~/go/bin
-          key: go-bins-${{ runner.os }}-revive-v1.14.0-goverter-v1.9.4
+          key: go-bins-${{ runner.os }}-go${{ matrix.go-version }}-revive-v1.14.0-goverter-v1.9.4
           restore-keys: |
-            go-bins-${{ runner.os }}-
+            go-bins-${{ runner.os }}-go${{ matrix.go-version }}-
       - run: go mod download
+      - run: go mod verify
       - name: Install tools
         run: task tools
       - name: Run CI suite
         run: task ci
+
+  tag:
+    needs: test
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - name: Get latest tag
+        id: latest_tag
+        run: |
+          LAST_TAG=$(git describe --tags --match="v*" 2>/dev/null | sed 's/^v//' | cut -d- -f1 || echo "0.0.0")
+          echo "last_tag=$LAST_TAG" >> $GITHUB_OUTPUT
+      - name: Compute next version
+        id: next_version
+        run: |
+          LAST_TAG="${{ steps.latest_tag.outputs.last_tag }}"
+          IFS='.' read -r MAJOR MINOR PATCH <<< "$LAST_TAG"
+          PATCH=$((PATCH + 1))
+          NEW_TAG="v${MAJOR}.${MINOR}.${PATCH}"
+          echo "new_tag=$NEW_TAG" >> $GITHUB_OUTPUT
+      - name: Create and push tags
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag ${{ steps.next_version.outputs.new_tag }}
+          git tag -f latest
+          git push origin ${{ steps.next_version.outputs.new_tag }}
+          git push -f origin latest
+      - name: Create Release
+        run: |
+          gh release create ${{ steps.next_version.outputs.new_tag }} \
+            --generate-notes \
+            --target main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

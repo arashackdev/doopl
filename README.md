@@ -234,4 +234,9 @@ Build and run with `go run -tags=ignore _examples/translate.go`.
 
 ## License
 
-Apache License 2.0. See [LICENSE](./LICENSE) file.
+MIT License with Commons Clause (no commercial usage). See [LICENSE](./LICENSE) file.
+
+**Personal/educational use:** ✅ Free
+**Commercial use:** Requires prior permission/negotiation
+
+For questions about commercial licensing, open an issue.

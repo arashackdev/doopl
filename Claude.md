@@ -420,6 +420,19 @@ See `docs/scope-and-checklist.md` for detailed status on each milestone.
 - Check `cmd/doopl/main.go` — each flag must be registered in the command definition
 - Flag name must match the option name (e.g., `--formality` → `WithFormality`)
 
+## License
+
+MIT + Commons Clause. See [LICENSE](./LICENSE).
+
+**What you can do:**
+- Use, modify, and distribute for personal/educational use
+- Contribute via pull requests
+
+**What you cannot do:**
+- Sell the software or services based on it commercially without permission
+
+For commercial licensing inquiries, open an issue.
+
 ## Support
 
 - **Issues:** https://github.com/arashackdev/doopl/issues

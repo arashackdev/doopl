@@ -1,4 +1,4 @@
-# doopl — DeepL API v3 Client for Go
+# DoopL — DeepL API v3 Client for Go
 
 ![Go Version](https://img.shields.io/badge/Go-1.24%2B-00ADD8?style=flat-square)
 ![Test Coverage](https://img.shields.io/badge/coverage-48.1%25-yellow?style=flat-square)
@@ -9,7 +9,7 @@ An idiomatic Go client for the [DeepL API v3](https://developers.deepl.com), usa
 
 ## Use with Claude & AI Clients (MCP)
 
-**Fastest way to get started:** Install doopl as an MCP server for Claude Code, Claude Desktop, or any MCP-compatible AI client.
+**Fastest way to get started:** Install DoopL as an MCP server for Claude Code, Claude Desktop, or any MCP-compatible AI client.
 
 ```bash
 # Build the MCP server

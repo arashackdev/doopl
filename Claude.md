@@ -21,7 +21,7 @@
 
 | Tool | Purpose | Config |
 |------|---------|--------|
-| Go 1.23+ | Language | `go.mod` |
+| Go 1.24+ | Language | `go.mod` |
 | Task | Task runner | `Taskfile.yml` |
 | revive | Linter | `revive.toml` |
 | goverter | Code generation | interface declarations in `internal/convert/` + `cmd/deepl/internal/convert/` |

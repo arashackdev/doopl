@@ -11,13 +11,13 @@ This file is development-only guidance for working with the doopl codebase using
 
 ## Development Stack
 
-| Tool | Purpose | Config |
-|------|---------|--------|
-| Go 1.23+ | Language | `go.mod` |
-| Task | Task runner | `Taskfile.yml` |
-| revive | Linter | `revive.toml` |
-| goverter | Code generation | interface declarations in `internal/convert/` |
-| urfave/cli | CLI framework | `cmd/doopl/main.go` |
+| Tool       | Purpose         | Config                                        |
+| ---------- | --------------- | --------------------------------------------- |
+| Go 1.24+   | Language        | `go.mod`                                      |
+| Task       | Task runner     | `Taskfile.yml`                                |
+| revive     | Linter          | `revive.toml`                                 |
+| goverter   | Code generation | interface declarations in `internal/convert/` |
+| urfave/cli | CLI framework   | `cmd/doopl/main.go`                           |
 
 ## Quick Commands
 

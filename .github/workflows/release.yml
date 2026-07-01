@@ -33,7 +33,7 @@ jobs:
 
       - uses: actions/setup-go@v4
         with:
-          go-version: 1.23.x
+          go-version: 1.24.x
 
       - name: Build doopl CLI
         env:
@@ -110,7 +110,7 @@ jobs:
 
       - uses: actions/setup-go@v4
         with:
-          go-version: 1.23.x
+          go-version: 1.24.x
 
       - name: Trigger pkg.go.dev indexing
         run: |

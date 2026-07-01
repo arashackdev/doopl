@@ -220,7 +220,7 @@ See [`CLAUDE.md`](./CLAUDE.md) for development guide and [`MILESTONES.md`](./MIL
 
 ## Minimum Go version
 
-Go 1.23+
+Go 1.24+
 
 ## Examples
 

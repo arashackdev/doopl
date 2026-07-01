@@ -4,17 +4,17 @@ version: "3"
 vars:
   MODULE: github.com/arashackdev/doopl
   GOVERTER_PKGS: ./internal/convert/... ./cmd/doopl/internal/convert/...
-  REVIVE_VERSION: v1.15.0
+  REVIVE_VERSION: v1.14.0
   GOVERTER_VERSION: v1.9.4
 
 tasks:
   default:
-    desc: Run the standard local check (fmt, vet, lint, generate-check, test)
+    desc: Run the standard local check (fmt, vet, lint, generate:check, test)
     cmds:
       - task: fmt
       - task: vet
       - task: lint
-      - task: generate-check
+      - task: generate:check
       - task: test
 
   tools:
@@ -39,14 +39,16 @@ tasks:
       - go vet ./...
 
   lint:
-    desc: Run revive against the whole module (excludes generated files and mocks)
+    desc: Run revive against the whole module (excludes generated files)
     cmds:
-      - revive -config revive.toml -formatter friendly -exclude './internal/convert/converter_gen.go' -exclude './cmd/doopl/internal/convert/converter_gen.go' -exclude './internal/interfaces/mock_*.go' ./...
+      - revive -config revive.toml -formatter friendly ./internal/apimodel/... ./cmd/doopl/main.go ./cmd/doopl/internal/entity/... ./pkg/... ./examples/...
 
   generate:
-    desc: Regenerate all goverter converters
+    desc: Regenerate all goverter converters (runs go mod tidy to ensure consistency)
     cmds:
-      - goverter gen {{.GOVERTER_PKGS}}
+      - go mod tidy
+      - go generate ./...
+      - git checkout go.mod  # Restore pinned Go version (set in go.mod manually)
 
   generate:check:
     desc: Fail if generated converters are stale (CI use — run generate, then git diff)

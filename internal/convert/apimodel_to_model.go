@@ -2,6 +2,8 @@
 // generated implementations (converter_gen.go) are checked in but should
 // never be hand-edited — run `task generate` after changing a converter
 // interface here.
+//
+//go:generate go run github.com/jmattheis/goverter/cmd/goverter gen .
 package convert
 
 import (

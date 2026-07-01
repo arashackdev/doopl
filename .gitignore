@@ -48,16 +48,18 @@ vendor/
 # Development notes (not shipped)
 MILESTONES.md
 
-# Docs — keep DEVELOPMENT.md in git, ignore other scattered docs
-docs/*
-!docs/DEVELOPMENT.md
+# Docs policy: all docs must go in docs/ directory
+# Scattered markdown files in root (should be in docs/) — NEVER commit to root
+/*.md
+!README.md
+!CLAUDE.md
+!LICENSE.md
+
+# Scattered shell scripts in root (should be in docs/) — NEVER commit to root
+/*.sh
 
 # Generated mocks
 internal/mocks/
 
-# Test reports
+# Test reports (temp files, don't commit)
 test-report.json
-REVIEW_SUMMARY.md
-REFACTOR_CHECKLIST.md
-FILES_TO_IGNORE.md
-QUICK_REFERENCE.txt

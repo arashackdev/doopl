@@ -2,6 +2,13 @@
 
 Comprehensive guide for contributing to doopl — the idiomatic Go client for DeepL API v3.
 
+## 📚 Documentation Index
+
+- **[TESTING_PLAYBOOK.md](./TESTING_PLAYBOOK.md)** — Complete testing guide with your own DeepL API key
+- **[CI_VERIFICATION.md](./CI_VERIFICATION.md)** — CI/CD pipeline verification and troubleshooting
+- **[REVIEW_SUMMARY.md](./REVIEW_SUMMARY.md)** — Code review, architecture assessment, improvements
+- **[QUICK_TEST.sh](./QUICK_TEST.sh)** — One-command validation script
+
 ## Quick Start
 
 ```bash

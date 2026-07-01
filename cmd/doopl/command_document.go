@@ -38,16 +38,16 @@ func documentCommand() *cli.Command {
 					outputPath := c.String("output")
 
 					inputFile, err := os.Open(inputPath)
-					defer inputFile.Close()
 					if err != nil {
 						return fmt.Errorf("cannot open input: %w", err)
 					}
+					defer inputFile.Close()
 
 					outputFile, err := os.Create(outputPath)
-					defer outputFile.Close()
 					if err != nil {
 						return fmt.Errorf("cannot create output: %w", err)
 					}
+					defer outputFile.Close()
 
 					authKey, err := getAuthKey(c)
 					if err != nil {
@@ -102,10 +102,10 @@ func documentCommand() *cli.Command {
 					inputPath := c.String("input")
 
 					inputFile, err := os.Open(inputPath)
-					defer inputFile.Close()
 					if err != nil {
 						return fmt.Errorf("cannot open input: %w", err)
 					}
+					defer inputFile.Close()
 
 					authKey, err := getAuthKey(c)
 					if err != nil {
@@ -182,10 +182,10 @@ func documentCommand() *cli.Command {
 					outputPath := c.String("output")
 
 					outputFile, err := os.Create(outputPath)
-					defer outputFile.Close()
 					if err != nil {
 						return fmt.Errorf("cannot create output: %w", err)
 					}
+					defer outputFile.Close()
 
 					authKey, err := getAuthKey(c)
 					if err != nil {
